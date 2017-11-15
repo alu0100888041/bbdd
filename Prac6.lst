@@ -1,0 +1,277 @@
+SQL> SYSDATE
+SP2-0042: unknown command "SYSDATE" - rest of line ignored.
+SQL> CURRENT SYSTIMESTAMP
+SP2-0734: unknown command beginning "CURRENT SY..." - rest of line ignored.
+SQL> 
+SQL> SELECT SYSDATE FROM DUAL;
+
+SYSDATE                                                                         
+---------                                                                       
+15-NOV-17                                                                       
+
+SQL> DNI DE LOS PROFESORES QUE AL MENOS DAN CLASE EN DOS TITULACIONES DISTINTAS
+SP2-0734: unknown command beginning "DNI DE LOS..." - rest of line ignored.
+SQL> SELECT TO CHAR(SYSDATE,'HH:MI:SS')
+  2  FROM DUAL*
+  3  ;
+SELECT TO CHAR(SYSDATE,'HH:MI:SS')
+       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT TO CHAR(SYSDATE,'HH:MI:SS')
+  2  FROM DUAL;
+SELECT TO CHAR(SYSDATE,'HH:MI:SS')
+       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT TO_CHAR(SYSDATE,'HH:MI:SS')
+  2  FROM DUAL;
+
+TO_CHAR(                                                                        
+--------                                                                        
+01:26:22                                                                        
+
+SQL> SELECT TO_CHAR(SYSDATE,'DD:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(                                                                        
+--------                                                                        
+15:11:17                                                                        
+
+SQL> SELECT TO_CHAR(SYSDATE,'DD:WW:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(SYS                                                                     
+-----------                                                                     
+15:46:11:17                                                                     
+
+SQL> SELECT TO_CHAR(SYSDATE,'WD:DD:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(SYS                                                                     
+-----------                                                                     
+34:15:11:17                                                                     
+
+SQL> SELECT TO_CHAR(SYSDATE,'DW:DD:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(SYS                                                                     
+-----------                                                                     
+43:15:11:17                                                                     
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                    *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  DROP COLUMN D1;
+DROP COLUMN D1
+            *
+ERROR at line 2:
+ORA-00904: "D1": invalid identifier 
+
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT*
+  2  FROM DEPARTAMENTO;
+
+        CD D                                                                    
+---------- ------------------------------------------------------------         
+         1 ANALISIS MATEMTICO                                                   
+         2 ASTROFSICA                                                           
+         3 ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                    
+         4 MATEMATICA FUNDAMENTAL                                               
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT TO_CHAR(SYSDATE,'WD:DD:MM:YY');
+SELECT TO_CHAR(SYSDATE,'WD:DD:MM:YY')
+                                    *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT TO_CHAR(SYSDATE,'WD:DD:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(SYS                                                                     
+-----------                                                                     
+34:15:11:17                                                                     
+
+SQL> SELECT TO_CHAR(SYSDATE,'DW:DD:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(SYS                                                                     
+-----------                                                                     
+43:15:11:17                                                                     
+
+SQL> DESCRIBE DEPARTAMENTO;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CD                                        NOT NULL NUMBER(2)
+ D                                                  VARCHAR2(60)
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  MODIFY (D VARCHAR2(50));
+
+Table altered.
+
+SQL> SELECT TO_CHAR(SYSDATE,'DAY:DD:MM:YY')
+  2  FROM DUAL;
+
+TO_CHAR(SYSDATE,'DAY:DD:MM:YY')                                                 
+---------------------------------------------                                   
+WEDNESDAY:15:11:17                                                              
+
+SQL> SELECT TO_CHAR(SYSDATE,'HH:MI:SS')
+  2  FROM DUAL;
+
+TO_CHAR(                                                                        
+--------                                                                        
+01:49:34                                                                        
+
+SQL> SELECT CURRENT_TIMESTAMP
+  2  FROM DUAL;
+
+CURRENT_TIMESTAMP                                                               
+---------------------------------------------------------------------------     
+15-NOV-17 01.50.07.856710 PM +00:00                                             
+
+SQL> SELECT TO_CHAR(SYSDATE,'HH24:MI:SS')
+  2  FROM DUAL;
+
+TO_CHAR(                                                                        
+--------                                                                        
+13:50:28                                                                        
+
+SQL> SELECT SYSDATE-TO_DATE(SELECT )
+  2  ;
+SELECT SYSDATE-TO_DATE(SELECT )
+                       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  MODIFY(D VARCHAR2(60));
+
+Table altered.
+
+SQL> SELECT SYSDATE-TO_DATE(SELECT FI FROM PLAN_DOCENTE WHERE DNI=8888)
+  2  ;
+SELECT SYSDATE-TO_DATE(SELECT FI FROM PLAN_DOCENTE WHERE DNI=8888)
+                       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT SYSDATE-TO_DATE(SELECT FI
+  2  FROM PLAN_DOCENTE
+  3  WHERE ((DNI=8888) AND (CAS=11)));
+SELECT SYSDATE-TO_DATE(SELECT FI
+                       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT SYSDATE-FI
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT SYSDATE-FI FROM PLAN_DOCENTE WHERE (DNI=8888) AND (CAS=11);
+
+SYSDATE-FI                                                                      
+----------                                                                      
+2997.58196                                                                      
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8));
+ADD (D1 TIMESTAMP(8) DAFAULT SYSTIMESTAMP(8))
+                     *
+ERROR at line 2:
+ORA-00907: missing right parenthesis 
+
+
+SQL> ADD (D1 TIMESTAMP(8) DEFAULT SYSTIMESTAMP(8));
+SP2-0734: unknown command beginning "ADD (D1 TI..." - rest of line ignored.
+SQL> ALTER TABLE DEPARTAMENTO
+  2  ADD (D1 TIMESTAMP(8) DEFAULT SYSTIMESTAMP(8));
+
+Table altered.
+
+SQL> ALTER TABLE DEPARTAMENTO
+  2  DROP COLUMN D1;
+
+Table altered.
+
+SQL> SELECT SYSDATE-TO_DATE(01/09/09);
+SELECT SYSDATE-TO_DATE(01/09/09)
+                               *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT SYSDATE-TO_DATE('01-SEP-09');
+SELECT SYSDATE-TO_DATE('01-SEP-09')
+                                  *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT SYSDATE-TO_DATE('01-SEP-09')
+  2  FROM DUAL;
+
+SYSDATE-TO_DATE('01-SEP-09')                                                    
+----------------------------                                                    
+                  2997.58432                                                    
+
+SQL> SPOOL OFF
