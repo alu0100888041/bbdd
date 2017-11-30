@@ -275,3 +275,127 @@ SYSDATE-TO_DATE('01-SEP-09')
                   2997.58432                                                    
 
 SQL> SPOOL OFF
+SQL> SELCT P FROM PROFESOR WHERE DNI IN (SELECT DNI FROM PLAN_DOCENTE
+SP2-0734: unknown command beginning "SELCT P FR..." - rest of line ignored.
+SQL> SELECT P FROM PROFESOR WHERE DNI IN (SELECT DNI FROM PLAN_DOCENTE
+  2  WHERE(FF-FI>365));
+
+P                                                                               
+------------------------------------------------------------                    
+JUAN                                                                            
+MARIA                                                                           
+CARMEN                                                                          
+DAVID                                                                           
+
+SQL> SELECT P FROM PROFESOR WHERE DNI IN (SELECT DNI FROM PLAN_DOCENTE
+  2  WHERE(FF-FI>365 OR FF IS NULL AND SYSDATE-FI>365));
+
+P                                                                               
+------------------------------------------------------------                    
+DAVID                                                                           
+JUAN                                                                            
+SOLEDAD                                                                         
+CARLOS                                                                          
+JOSE MANUEL                                                                     
+PEDRO                                                                           
+MARIA                                                                           
+IVAN                                                                            
+CARMEN                                                                          
+MARIO                                                                           
+FRANCISCO                                                                       
+
+P                                                                               
+------------------------------------------------------------                    
+ANGELA                                                                          
+
+12 rows selected.
+
+SQL> SELECT COUNT(DNI) FROM PROFESOR WHERE CAR IN(SELECT CAR FROM
+  2  AREA NATURAL JOIN DEPARTAMENTO WHERE D='ASTROFISICA');
+
+COUNT(DNI)                                                                      
+----------                                                                      
+         0                                                                      
+
+SQL> SELECT COUNT(DNI) FROM PROFESOR WHERE CAR IN(SELECT CAR FROM
+  2  AREA NATURAL JOIN DEPARTAMENTO WHERE D='ASTROFSICA');
+
+COUNT(DNI)                                                                      
+----------                                                                      
+         1                                                                      
+
+SQL> SELECT D COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN AREA, DEPARTAMENTO
+  3  WHERE AREA.CD=DEPARTAMENTO.CD
+  4  ORDER BY D;
+SELECT D COUNT(P)
+              *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT D, COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN AREA, DEPARTAMENTO
+  3  WHERE AREA.CD=DEPARTAMENTO.CD
+  4  ORDER BY D;
+SELECT D, COUNT(P)
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT D, COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN AREA, DEPARTAMENTO
+  3  WHERE AREA.CD=DEPARTAMENTO.CD
+  4  GROUP BY D
+  5  ORDER BY D;
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+ANALISIS MATEMTICO                                                    4         
+ASTROFSICA                                                            1         
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                     8         
+MATEMATICA FUNDAMENTAL                                                1         
+
+SQL> SELECT COUNT (DISTINCT T)
+  2  FROM ASIGNATURA NATURAL JOIN AREA,DEPARTAMENTO
+  3  WHERE ASIGNATURA.CAR=AREA.CAR AND D='ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION';
+WHERE ASIGNATURA.CAR=AREA.CAR AND D='ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION'
+                     *
+ERROR at line 3:
+ORA-25155: column used in NATURAL join cannot have qualifier 
+
+
+SQL> SELECT COUNT (DISTINCT T)
+  2  FROM ASIGNATURA NATURAL JOIN AREA,DEPARTAMENTO
+  3  WHERE ASIGNATURA.CAR = AREA.CAR AND D='ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION';
+WHERE ASIGNATURA.CAR = AREA.CAR AND D='ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION'
+                       *
+ERROR at line 3:
+ORA-25155: column used in NATURAL join cannot have qualifier 
+
+
+SQL> SELECT COUNT (DISTINCT T)
+  2  FROM ASIGNATURA
+  3  WHERE CAR IN(SELECT CAR FROM AREA NATURAL JOIN DEPARTAMENTO
+  4  WHERE D='ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION');
+
+COUNT(DISTINCTT)                                                                
+----------------                                                                
+               2                                                                
+
+SQL> SELECT COUNT(DNI) FROM PROFESOR NATURAL JOIN AREA
+  2  WHERE AR LIKE 'A%';
+
+COUNT(DNI)                                                                      
+----------                                                                      
+         3                                                                      
+
+SQL> SELECT COUNT(P) FROM PROFESOR NATURAL JOIN AREA
+  2  WHERE AR LIKE 'A%';
+
+  COUNT(P)                                                                      
+----------                                                                      
+         3                                                                      
+
+SQL> SPOOL OFF
