@@ -399,3 +399,232 @@ SQL> SELECT COUNT(P) FROM PROFESOR NATURAL JOIN AREA
          3                                                                      
 
 SQL> SPOOL OFF
+SQL> SELECT T, COUNT(CAS)
+  2  FROM ASIGNATURA
+  3  GROUP BY T
+  4  ORDER BY T;
+
+T    COUNT(CAS)                                                                 
+---- ----------                                                                 
+GF            1                                                                 
+GII           8                                                                 
+GM            2                                                                 
+MII           2                                                                 
+
+SQL> SELECT A FROM ASIGNATURA
+  2  WHERE CT=(SELECT MAX(CT) FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ENSENANZA DE LA MATEMATICA                                                      
+
+SQL> SELECT A FROM ASIGNATURA
+  2  WHERE CT=(SELECT MIN(CT) FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA                                                                     
+
+SQL> SELECT A FROM ASIGNATURA
+  2  WHERE CT IN (SELECT MIN(CT) FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA                                                                     
+
+SQL> SELECT A,(CT+CP+CL) FROM ASIGNATURA;
+
+A                                                  (CT+CP+CL)                   
+-------------------------------------------------- ----------                   
+BASES DE DATOS                                              6                   
+INTELIGENCIA ARTIFICIAL                                     6                   
+ALMACENES DE DATOS                                          3                   
+MINERIA DE DATOS                                            3                   
+INFORMATICA BASICA                                          6                   
+ALGEBRA                                                     6                   
+CALCULO                                                     6                   
+OPTIMIZACION                                                6                   
+GESTION DE RIESGOS                                          6                   
+ASTRONOMIA                                                  6                   
+ENSENANZA DE LA MATEMATICA                                  6                   
+
+A                                                  (CT+CP+CL)                   
+-------------------------------------------------- ----------                   
+ANALISIS COMPLEJO                                         7.5                   
+ESTADISTICA                                                 0                   
+
+13 rows selected.
+
+SQL> SELECT A FROM ASIGNATURA
+  2  WHERE (CT+CP+CL)=(SELECT MAX(CT+CP+CL)
+  3  FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ANALISIS COMPLEJO                                                               
+
+SQL> SELECT A FROM ASIGNATURA
+  2  WHERE (CT+CP+CL)=(SELECT MIN(CT+CP+CL)
+  3  FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA                                                                     
+
+SQL> SELECT *
+  2  FROM ASIGNATURA;
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+         1 BASES DE DATOS                                     GII           3   
+         7          3        1.5        1.5                                     
+                                                                                
+         2 INTELIGENCIA ARTIFICIAL                            GII           3   
+         4        1.5        1.5          3                                     
+                                                                                
+         3 ALMACENES DE DATOS                                 MII           1   
+         7        1.5          0        1.5                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+         4 MINERIA DE DATOS                                   MII           1   
+         7        1.5          0        1.5                                     
+                                                                                
+         5 INFORMATICA BASICA                                 GII           1   
+         7          3        1.5        1.5                                     
+                                                                                
+         6 ALGEBRA                                            GII           1   
+         1          3          3          0                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+         7 CALCULO                                            GII           1   
+         8          3          3          0                                     
+                                                                                
+         8 OPTIMIZACION                                       GII           1   
+         6          3        1.5        1.5                                     
+                                                                                
+         9 GESTION DE RIESGOS                                 GII           3   
+         4          3          0          3                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+        10 ASTRONOMIA                                         GF            2   
+         3          3        1.5        1.5                                     
+                                                                                
+        11 ENSENANZA DE LA MATEMATICA                         GM            2   
+         5          6          0          0                                     
+                                                                                
+        12 ANALISIS COMPLEJO                                  GM            4   
+         2        4.5          3          0                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+        13 ESTADISTICA                                        GII           3   
+         6          0          0          0                                     
+                                                                                
+
+13 rows selected.
+
+SQL> SELECT AR FROM AREA
+  2  WHERE CAR IN(SELECT CAR
+  3  FROM ASIGNATURA
+  4  WHERE (CT+CP+CL)=(SELECT MAX(CT+CP+CL)
+  5  FROM ASIGNATURA));
+
+AR                                                                              
+------------------------------------------------------------                    
+ANALISIS MATEMATICO                                                             
+
+SQL> SELECT COUNT(CAS) FROM
+  2  PLAN_DOCENTE WHERE DNI='1111';
+
+COUNT(CAS)                                                                      
+----------                                                                      
+         2                                                                      
+
+SQL> SELECT SUM(CT+CP+CL) FROM PLAN_DOCENTE
+  2  WHERE DNI='1111';
+SELECT SUM(CT+CP+CL) FROM PLAN_DOCENTE
+                 *
+ERROR at line 1:
+ORA-00904: "CL": invalid identifier 
+
+
+SQL> SELECT SUM(CTA+CPA+CLA) FROM PLAN_DOCENTE
+  2  WHERE DNI='1111';
+
+SUM(CTA+CPA+CLA)                                                                
+----------------                                                                
+               9                                                                
+
+SQL> SELECT P FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  2  WHERE FF IS NULL
+  3  GROUP BY P,DNI
+  4  HAVING SUM(CTA+CPA+CLA) >= ALL(SELECT SUM(CTA+CPA+CLA)
+  5  FROM PLAN_DOCENTE
+  6  WHERE FF IS NULL
+  7  GROUP BY DNI);
+
+P                                                                               
+------------------------------------------------------------                    
+MARIA                                                                           
+PEDRO                                                                           
+
+SQL> SELECT AVG(COUNT(*))
+  2  FROM ASIGNATURA
+  3  GROUP BY CAR;
+
+AVG(COUNT(*))                                                                   
+-------------                                                                   
+        1.625                                                                   
+
+SQL> SELECT AVG(COUNT(*))
+  2  FROM PROFESOR NATURAL JOIN AREA
+  3  GROUP BY CD;
+
+AVG(COUNT(*))                                                                   
+-------------                                                                   
+          3.5                                                                   
+
+SQL> SELECT AR FROM AREA NATURAL JOIN ASIGNATURA
+  2  GROUP BY AR
+  3  HAVING COUNT(CAS)>3;
+
+AR                                                                              
+------------------------------------------------------------                    
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+
+SQL> SELECT AR FROM AREA NATURAL JOIN ASIGNATURA
+  2  GROUP BY AR
+  3  HAVING COUNT(CAS)>6;
+
+no rows selected
+
+SQL> SELECT D
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA,PROFESOR
+  3  GROUP BY D
+  4  HAVING COUNT(P)<=(SELECT MIN (COUNT (P))
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA,PROFESOR
+  6  GROUP BY D);
+
+D                                                                               
+------------------------------------------------------------                    
+ASTROFSICA                                                                      
+MATEMATICA FUNDAMENTAL                                                          
+
+SQL> SPOOL OFF
