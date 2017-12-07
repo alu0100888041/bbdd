@@ -499,3 +499,280 @@ BASES DE DATOS
 6 rows selected.
 
 SQL> SPOOL OFF
+SQL> 
+SQL> SELECT P FROM PROFESOR WHERE DNI(SELECT DNI FROM
+  2  PLAN_DOCENTE NATURAL JOIN ASIGNATURA
+  3  WHERE FF IS NULL AND (T='GII' OR T='MII'));
+SELECT P FROM PROFESOR WHERE DNI(SELECT DNI FROM
+                                 *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT P FROM PROFESOR WHERE DNI IN(SELECT DNI FROM
+  2  PLAN_DOCENTE NATURAL JOIN ASIGNATURA
+  3  WHERE FF IS NULL AND (T='GII' OR T='MII'));
+
+P                                                                               
+------------------------------------------------------------                    
+MARIA                                                                           
+PEDRO                                                                           
+SOLEDAD                                                                         
+CARLOS                                                                          
+IVAN                                                                            
+ANGELA                                                                          
+JUAN                                                                            
+JOSE MANUEL                                                                     
+DAVID                                                                           
+
+9 rows selected.
+
+SQL> SELECT P FROM PROFESOR
+  2  WHERE DNI IN(SELECT DNI FROM
+  3  PLAN_DOCENTE NATURAL JOIN ASIGNATURA
+  4  WHERE FF IS NULL AND T='GII')
+  5  INTERSECT
+  6  SELECT P FROM PROFESOR
+  7  WHERE DNI IN(SELECT DNI FROM
+  8  PLAN_DOCENTE NATURAL JOIN ASIGNATURA
+  9  WHERE FF IS NULL AND T='MII');
+
+no rows selected
+
+SQL> SELECT P FROM PROFESOR
+  2  WHERE DNI NOT IN(SELECT DNI FROM
+  3  PLAN_DOCENTE WHERE FF IS NULL);
+
+P                                                                               
+------------------------------------------------------------                    
+CARMEN                                                                          
+CARMELO                                                                         
+CARINA                                                                          
+
+SQL> SELECT P FROM PROFESOR
+  2  WHERE DNI IN(SELECT DNI FROM
+  3  PLAN_DOCENTE WHERE FF NOT NULL);
+PLAN_DOCENTE WHERE FF NOT NULL)
+                          *
+ERROR at line 3:
+ORA-00920: invalid relational operator 
+
+
+SQL> SELECT P FROM PROFESOR
+  2  WHERE DNI IN(SELECT DNI FROM
+  3  PLAN_DOCENTE WHERE FF IS NOT NULL);
+
+P                                                                               
+------------------------------------------------------------                    
+MARIA                                                                           
+JUAN                                                                            
+CARLOS                                                                          
+DAVID                                                                           
+CARMEN                                                                          
+
+SQL> SELECT A FROM ASIGNATURA
+  2  WHERE T='GII';
+
+A                                                                               
+--------------------------------------------------                              
+BASES DE DATOS                                                                  
+INTELIGENCIA ARTIFICIAL                                                         
+INFORMATICA BASICA                                                              
+ALGEBRA                                                                         
+CALCULO                                                                         
+OPTIMIZACION                                                                    
+GESTION DE RIESGOS                                                              
+ESTADISTICA                                                                     
+
+8 rows selected.
+
+SQL> SELECT AR, A
+  2  FROM AREA NATURAL JOIN ASIGNATURA;
+
+AR                                                                              
+------------------------------------------------------------                    
+A                                                                               
+--------------------------------------------------                              
+ALGEBRA                                                                         
+ALGEBRA                                                                         
+                                                                                
+ANALISIS MATEMATICO                                                             
+ANALISIS COMPLEJO                                                               
+                                                                                
+ASTRONOMIA Y ASTROFISICA                                                        
+ASTRONOMIA                                                                      
+                                                                                
+
+AR                                                                              
+------------------------------------------------------------                    
+A                                                                               
+--------------------------------------------------                              
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+INTELIGENCIA ARTIFICIAL                                                         
+                                                                                
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+GESTION DE RIESGOS                                                              
+                                                                                
+DIDACTICA DE LA MATEMATICA                                                      
+ENSENANZA DE LA MATEMATICA                                                      
+                                                                                
+
+AR                                                                              
+------------------------------------------------------------                    
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+ESTADISTICA                                                                     
+                                                                                
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+OPTIMIZACION                                                                    
+                                                                                
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+INFORMATICA BASICA                                                              
+                                                                                
+
+AR                                                                              
+------------------------------------------------------------                    
+A                                                                               
+--------------------------------------------------                              
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+MINERIA DE DATOS                                                                
+                                                                                
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+ALMACENES DE DATOS                                                              
+                                                                                
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+BASES DE DATOS                                                                  
+                                                                                
+
+AR                                                                              
+------------------------------------------------------------                    
+A                                                                               
+--------------------------------------------------                              
+MATEMATICA APLICADA                                                             
+CALCULO                                                                         
+                                                                                
+
+13 rows selected.
+
+SQL> SELECT D, AR
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  ORDER BY D, AR;
+
+D                                                                               
+------------------------------------------------------------                    
+AR                                                                              
+------------------------------------------------------------                    
+ANALISIS MATEMTICO                                                              
+ANALISIS MATEMATICO                                                             
+                                                                                
+ANALISIS MATEMTICO                                                              
+DIDACTICA DE LA MATEMATICA                                                      
+                                                                                
+ANALISIS MATEMTICO                                                              
+MATEMATICA APLICADA                                                             
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+AR                                                                              
+------------------------------------------------------------                    
+ASTROFSICA                                                                      
+ASTRONOMIA Y ASTROFISICA                                                        
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+AR                                                                              
+------------------------------------------------------------                    
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+                                                                                
+MATEMATICA FUNDAMENTAL                                                          
+ALGEBRA                                                                         
+                                                                                
+
+8 rows selected.
+
+SQL> SELECT D,P FROM PROFESOR NATURAL JOIN DEPARTAMENTO
+  2  WHERE P IN(SELECT P
+  3  FROM PROFESOR NATURAL JOIN AREA
+  4  WHERE AREA.CD=DEPARTAMENTO.CD)
+  5  ORDER BY D,P;
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ANALISIS MATEMTICO                                                              
+ANGELA                                                                          
+                                                                                
+ANALISIS MATEMTICO                                                              
+CARINA                                                                          
+                                                                                
+ANALISIS MATEMTICO                                                              
+FRANCISCO                                                                       
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ANALISIS MATEMTICO                                                              
+MARIO                                                                           
+                                                                                
+ASTROFSICA                                                                      
+CARMEN                                                                          
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+CARLOS                                                                          
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+CARMELO                                                                         
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+DAVID                                                                           
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+JOSE MANUEL                                                                     
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+JUAN                                                                            
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+MARIA                                                                           
+                                                                                
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+PEDRO                                                                           
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                               
+SOLEDAD                                                                         
+                                                                                
+MATEMATICA FUNDAMENTAL                                                          
+IVAN                                                                            
+                                                                                
+
+14 rows selected.
+
+SQL> SPOOL OFF
