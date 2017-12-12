@@ -574,3 +574,125 @@ SQL> SELECT * FROM VISTA2;
 19 rows selected.
 
 SQL> SPOOL OFF
+SQL> UPDATE VISTA2
+  2  SET A='INGLES'
+  3  WHERE A='OPTIMIZACION';
+SET A='INGLES'
+    *
+ERROR at line 2:
+ORA-01779: cannot modify a column which maps to a non key-preserved table 
+
+
+SQL> UPDATE VISTA2
+  2  SET A='CONTROL DE CALIDAD'
+  3  WHERE A='ALMACENES DE DATOS';
+SET A='CONTROL DE CALIDAD'
+    *
+ERROR at line 2:
+ORA-01779: cannot modify a column which maps to a non key-preserved table 
+
+
+SQL> DESCRIBE VISTA2;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DNI                                       NOT NULL NUMBER(8)
+ A                                         NOT NULL VARCHAR2(50)
+ T                                         NOT NULL CHAR(4)
+ CUR                                                NUMBER(1)
+ CAR                                                NUMBER(3)
+
+SQL> DROP VIEW VISTA1;
+
+View dropped.
+
+SQL> SELECT *
+  2  FROM VISTA2;
+FROM VISTA2
+     *
+ERROR at line 2:
+ORA-04063: view "ALU0100888041.VISTA2" has errors 
+
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> CREATE INDEX INDICE1 ON PROFESOR(P);
+
+Index created.
+
+SQL> SELECT DNI FROM PROFESOR
+  2  WHERE P='JUAN';
+
+       DNI                                                                      
+----------                                                                      
+      1111                                                                      
+
+SQL> DROP INDEX INDICE1;
+
+Index dropped.
+
+SQL> CREATE INDEX INDICE2 ON VISTA1(CAR);
+CREATE INDEX INDICE2 ON VISTA1(CAR)
+                        *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> CREATE VIEW VISTA1
+  2  AS SELECT CAS,A,T,CUR,CAR
+  3  FROM ASIGNATURA;
+
+View created.
+
+SQL> CREATE INDEX INDICE2 ON VISTA1(CAR);
+CREATE INDEX INDICE2 ON VISTA1(CAR)
+                        *
+ERROR at line 1:
+ORA-01702: a view is not appropriate here 
+
+
+SQL> GRANT SELECT ON DEPARTAMENTO TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT SELECT ON AREA TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT SELECT ON ASIGNATURA TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT SELECT ON TITULACION TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT INSERT, UPDATE, DELETE ON DEPARTAMENTO TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT INSERT, UPDATE, DELETE ON AREA TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT UPDATE ON ASIGNATURA TO alumno;
+
+Grant succeeded.
+
+SQL> GRANT UPDATE ON TITULACION TO alumno;
+
+Grant succeeded.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> CONNECT
+Enter user-name: alumno
+ERROR:
+ORA-12162: TNS:net service name is incorrectly specified 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> SPOOL OFF
