@@ -696,3 +696,118 @@ ORA-12162: TNS:net service name is incorrectly specified
 
 Warning: You are no longer connected to ORACLE.
 SQL> SPOOL OFF
+SQL> CONNECT
+Enter user-name: alumno
+Connected.
+SQL> SELECT *
+  2  FROM alu0100888041.DEPARTAMENTO;
+
+        CD D                                                                    
+---------- ------------------------------------------------------------         
+         1 ANALISIS MATEMTICO                                                   
+         2 ASTROFSICA                                                           
+         3 ESTADISTICA,INVESTIGACION OPERATIVA Y COMPUTACION                    
+         4 MATEMATICA FUNDAMENTAL                                               
+
+SQL> SELECT *
+  2  FROM alu0100888041.PROFESOR;
+FROM alu0100888041.PROFESOR
+                   *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO alu0100888041.DEPARTAMENTO
+  2  VALUES(5,'ECONOMIA');
+
+1 row created.
+
+SQL> UPDATE alu0100888041.DEPARTAMENTO
+  2  SET D='ECONOMIA APLICADA'
+  3  WHERE CD=5;
+
+1 row updated.
+
+SQL> UPDATE alu0100888041.TITULACION
+  2  SET FAC='ETSII'
+  3  WHERE T='GII';
+
+1 row updated.
+
+SQL> DELETE FROM alu0100888041.TITULACION
+  2  WHERE T='GII';
+DELETE FROM alu0100888041.TITULACION
+                          *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> CREATE VIEW VISTA3 AS SELECT A,CAR
+  2  FROM alu0100888041.ASIGNATURA;
+
+View created.
+
+SQL> SELECT *
+  2  FROM VISTA3;
+
+A                                                         CAR                   
+-------------------------------------------------- ----------                   
+BASES DE DATOS                                              7                   
+INTELIGENCIA ARTIFICIAL                                     4                   
+ALMACENES DE DATOS                                          7                   
+MINERIA DE DATOS                                            7                   
+INFORMATICA BASICA                                          7                   
+ALGEBRA                                                     1                   
+CALCULO                                                     8                   
+OPTIMIZACION                                                6                   
+GESTION DE RIESGOS                                          4                   
+ASTRONOMIA                                                  3                   
+ENSENANZA DE LA MATEMATICA                                  5                   
+
+A                                                         CAR                   
+-------------------------------------------------- ----------                   
+ANALISIS COMPLEJO                                           2                   
+ESTADISTICA                                                 6                   
+
+13 rows selected.
+
+SQL> DROP VIEW VISTA3;
+
+View dropped.
+
+SQL> DROP TABLE alu0100888041.ASIGNATURA;
+DROP TABLE alu0100888041.ASIGNATURA
+                         *
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> SPOOL OFF
+SQL> REVOKE ALL PRIVILEGES FROM alumno;
+REVOKE ALL PRIVILEGES FROM alumno
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> REVOKE ALL PRIVILEGES ON DEPARTAMENTO FROM alumno;
+
+Revoke succeeded.
+
+SQL> REVOKE ALL PRIVILEGES ON AREA FROM alumno;
+
+Revoke succeeded.
+
+SQL> REVOKE ALL PRIVILEGES ON ASIGNATURA FROM alumno;
+
+Revoke succeeded.
+
+SQL> REVOKE ALL PRIVILEGES ON TITULACION FROM alumno;
+
+Revoke succeeded.
+
+SQL> SPOOL OFF
