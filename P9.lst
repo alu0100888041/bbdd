@@ -1,0 +1,150 @@
+SQL> CREATE PROCEDURE NUMERO_AREAS
+  2  DECLARE
+  3  CURSOR cursor IS
+  4  SELECT D, COUNT(DISTINCT CAR) AS CANTIDAD
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA
+  6  GROUP BY D
+  7  ORDER BY CANTIDAD DESC;
+  8  fila CANTIDAD%ROWTYPE;
+  9  BEGIN
+ 10  OPEN CANTIDAD;
+ 11  LOOP
+ 12  FETCH CANTIDAD INTO fila;
+ 13  EXIT WHEN cursor%NOTFOUND;
+ 14  IF(%ROWCOUNT=3) THEN
+ 15  dbms_output.put_line(fila.D);
+ 16  EXIT;
+ 17  END IF;
+ 18  END LOOP;
+ 19  CLOSE cursor;
+ 20  END;
+ 21  /
+
+Warning: Procedure created with compilation errors.
+
+SQL> CREATE OR REPLACE PROCEDURE NUMERO_AREAS
+  2  DECLARE
+  3  CURSOR cursor IS
+  4  SELECT D, COUNT(DISTINCT CAR) AS CANTIDAD
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA
+  6  GROUP BY D
+  7  ORDER BY CANTIDAD DESC;
+  8  fila cursor%ROWTYPE;
+  9  BEGIN
+ 10  OPEN cursor;
+ 11  LOOP
+ 12  FETCH cursor INTO fila;
+ 13  EXIT WHEN cursor%NOTFOUND;
+ 14  IF(%ROWCOUNT=3) THEN
+ 15  dbms_output.put_line(fila.D);
+ 16  EXIT;
+ 17  END IF;
+ 18  END LOOP;
+ 19  CLOSE cursor;
+ 20  END;
+ 21  /
+
+Warning: Procedure created with compilation errors.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE NUMERO_AREAS
+  2  CURSOR cursor IS
+  3  SELECT D, COUNT(DISTINCT CAR) AS CANTIDAD
+  4  FROM DEPARTAMENTO NATURAL JOIN AREA
+  5  GROUP BY D
+  6  ORDER BY CANTIDAD DESC;
+  7  fila cursor%ROWTYPE;
+  8  BEGIN
+  9  OPEN cursor;
+ 10  LOOP
+ 11  FETCH cursor INTO fila;
+ 12  EXIT WHEN cursor%NOTFOUND;
+ 13  IF(%ROWCOUNT=3) THEN
+ 14  dbms_output.put_line(fila.D);
+ 15  EXIT;
+ 16  END IF;
+ 17  END LOOP;
+ 18  CLOSE cursor;
+ 19* END;
+SQL> /
+
+Warning: Procedure created with compilation errors.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE NUMERO_AREAS
+  2  CURSOR cursor IS
+  3  SELECT D, COUNT(DISTINCT CAR) AS CANTIDAD
+  4  FROM DEPARTAMENTO NATURAL JOIN AREA
+  5  GROUP BY D
+  6  ORDER BY CANTIDAD DESC;
+  7  fila cursor%ROWTYPE;
+  8  BEGIN
+  9  OPEN cursor;
+ 10  LOOP
+ 11  FETCH cursor INTO fila;
+ 12  EXIT WHEN cursor%NOTFOUND;
+ 13  IF(cursor%ROWCOUNT=3) THEN
+ 14  dbms_output.put_line(fila.D);
+ 15  EXIT;
+ 16  END IF;
+ 17  END LOOP;
+ 18  CLOSE cursor;
+ 19* END;
+SQL> /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE NUMERO_AREAS:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+2/1      PLS-00103: Encountered the symbol "CURSOR" when expecting one of       
+         the following:                                                         
+         ( ; is with default authid as cluster compress order using             
+         compiled wrapped external deterministic parallel_enable                
+         pipelined result_cache accessible rewrite                              
+                                                                                
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE NUMERO_AREAS AS
+  2  CURSOR cursor IS
+  3  SELECT D, COUNT(DISTINCT CAR) AS CANTIDAD
+  4  FROM DEPARTAMENTO NATURAL JOIN AREA
+  5  GROUP BY D
+  6  ORDER BY CANTIDAD DESC;
+  7  fila cursor%ROWTYPE;
+  8  BEGIN
+  9  OPEN cursor;
+ 10  LOOP
+ 11  FETCH cursor INTO fila;
+ 12  EXIT WHEN cursor%NOTFOUND;
+ 13  IF(cursor%ROWCOUNT=3) THEN
+ 14  dbms_output.put_line(fila.D);
+ 15  EXIT;
+ 16  END IF;
+ 17  END LOOP;
+ 18  CLOSE cursor;
+ 19* END;
+SQL> /
+
+Procedure created.
+
+SQL> CALL NUMERO_AREAS();
+
+Call completed.
+
+SQL> SET SERVER OUTPUT ON
+SP2-0158: unknown SET option "SERVER"
+SQL> SET SERVEROUTPUT ON
+SQL> /
+MATEMATICA FUNDAMENTAL                                                          
+
+Call completed.
+
+SQL> SPOOL OFF
