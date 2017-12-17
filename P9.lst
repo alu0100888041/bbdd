@@ -148,3 +148,276 @@ MATEMATICA FUNDAMENTAL
 Call completed.
 
 SQL> SPOOL OFF
+SQL> TYPE dato IS VARRAY(20) OF AREA.A%TYPE;
+SP2-0734: unknown command beginning "TYPE dato ..." - rest of line ignored.
+SQL> CREATE PROCEDURE areasadscritas(cd IN DEPARTAMENTO.CD%TYPE, area OUT dato) IS
+  2  BEGIN
+  3  SELECT AR
+  4  INTO area
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA
+  6  WHERE CD=cd;
+  7  END;
+  8  DECLARE
+  9  area OUT dato
+ 10  BEGIN
+ 11  areasadscritas(1,area);
+ 12  for i in 1..area.count loop
+ 13  dbms_output.put_line(area(i));
+ 14  end loop;
+ 15  END;
+ 16  /
+
+Warning: Procedure created with compilation errors.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE, varea OUT dato) AS
+  2  BEGIN
+  3  SELECT AR
+  4  INTO varea
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA
+  6  WHERE CD=vcd;
+  7  END;
+  8  DECLARE
+  9  varea OUT dato
+ 10  BEGIN
+ 11  areasadscritas(1,varea);
+ 12  for i in 1..varea.count loop
+ 13  dbms_output.put_line(varea(i));
+ 14  end loop;
+ 15* END;
+SQL> /
+CREATE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE, varea OUT dato) AS
+                 *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE, varea OUT dato) AS
+  2  BEGIN
+  3  SELECT AR
+  4  INTO varea
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA
+  6  WHERE CD=vcd;
+  7  END;
+  8  DECLARE
+  9  varea OUT dato
+ 10  BEGIN
+ 11  areasadscritas(1,varea);
+ 12  for i in 1..varea.count loop
+ 13  dbms_output.put_line(varea(i));
+ 14  end loop;
+ 15* END;
+SQL> /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE AREASADSCRITAS:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+8/1      PLS-00103: Encountered the symbol "DECLARE"                            
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE, varea OUT dato) AS
+  2  BEGIN
+  3  SELECT AR
+  4  INTO varea
+  5  FROM DEPARTAMENTO NATURAL JOIN AREA
+  6  WHERE CD=vcd;
+  7* END;
+  8  /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE AREASADSCRITAS:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+0/0      PL/SQL: Compilation unit analysis terminated                           
+1/65     PLS-00201: identifier 'DATO' must be declared                          
+SQL> TYPE dato IS VARRAY(20) OF AREA.A%TYPE;
+SP2-0734: unknown command beginning "TYPE dato ..." - rest of line ignored.
+SQL> CREATE TYPE dato IS VARRAY(20) OF AREA.A%TYPE;
+  2  CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE, varea OUT dato) AS
+  3  BEGIN
+  4  SELECT AR
+  5  INTO varea
+  6  FROM DEPARTAMENTO NATURAL JOIN AREA
+  7  WHERE CD=vcd;
+  8  END;
+  9  /
+
+Warning: Type created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for TYPE DATO:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+2/1      PLS-00103: Encountered the symbol "CREATE"                             
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TYPE dato IS VARRAY(20) OF AREA.A%TYPE;
+  2  CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE, varea OUT dato) AS
+  3  BEGIN
+  4  SELECT AR
+  5  INTO varea
+  6  FROM DEPARTAMENTO NATURAL JOIN AREA
+  7  WHERE CD=vcd;
+  8  END;
+  9  DECLARE
+ 10  varea OUT dato
+ 11  BEGIN
+ 12  areasadscritas(1,varea);
+ 13  for i in 1..varea.count loop
+ 14  dbms_output.put_line(varea(i));
+ 15  end loop;
+ 16* END;
+ 17  /
+
+Warning: Type created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for TYPE DATO:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+2/1      PLS-00103: Encountered the symbol "CREATE"                             
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE) AS
+  2  CURSOR cursor IS
+  3  SELECT AR
+  4  FROM DEPARTAMENTO NATURAL JOIN AREA
+  5  WHERE CD=vcd;
+  6  fila cursor%ROWTYPE;
+  7  BEGIN
+  8  OPEN cursor;
+  9  LOOP
+ 10  FETCH cursor INTO fila;
+ 11  EXIT WHEN cursor%NOTFOUND;
+ 12  for i in 1..varea.count loop
+ 13  dbms_output.put_line(varea(i));
+ 14  END LOOP;
+ 15  END LOOP;
+ 16  CLOSE cursor;
+ 17* END;
+SQL> /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE AREASADSCRITAS:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+12/1     PL/SQL: Statement ignored                                              
+12/13    PLS-00201: identifier 'VAREA.COUNT' must be declared                   
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE) AS
+  2  CURSOR cursor IS
+  3  SELECT AR
+  4  FROM DEPARTAMENTO NATURAL JOIN AREA
+  5  WHERE CD=vcd;
+  6  fila cursor%ROWTYPE;
+  7  BEGIN
+  8  OPEN cursor;
+  9  LOOP
+ 10  FETCH cursor INTO fila;
+ 11  EXIT WHEN cursor%NOTFOUND;
+ 12  IF(cursor%FOUND) THEN
+ 13  dbms_output.put_line(fila.AR);
+ 14  EXIT;
+ 15  END IF;
+ 16  END LOOP;
+ 17  CLOSE cursor;
+ 18* END;
+SQL> /
+
+Procedure created.
+
+SQL> CALL areasadscritas(2);
+
+Call completed.
+
+SQL> SET SERVEROUTPUT ON
+SQL> CALL areasadscritas(2);
+ASTRONOMIA Y ASTROFISICA                                                        
+
+Call completed.
+
+SQL> CALL areasadscritas(3);
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+
+Call completed.
+
+SQL> CALL areasadscritas(1);
+ANALISIS MATEMATICO                                                             
+
+Call completed.
+
+SQL> CALL areasadscritas(4);
+ALGEBRA                                                                         
+
+Call completed.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1* CALL areasadscritas(4)
+SQL> CREATE OR REPLACE PROCEDURE areasadscritas(vcd IN DEPARTAMENTO.CD%TYPE) AS
+  2  CURSOR cursor IS
+  3  SELECT AR
+  4  FROM DEPARTAMENTO NATURAL JOIN AREA
+  5  WHERE CD=vcd;
+  6  fila cursor%ROWTYPE;
+  7  BEGIN
+  8  OPEN cursor;
+  9  LOOP
+ 10  FETCH cursor INTO fila;
+ 11  EXIT WHEN cursor%NOTFOUND;
+ 12  dbms_output.put_line(fila.AR);
+ 13  END LOOP;
+ 14  CLOSE cursor;
+ 15  END;
+ 16  /
+
+Procedure created.
+
+SQL> CALL areasadscritas(3);
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+
+Call completed.
+
+SQL> CALL areasadscritas(1);
+ANALISIS MATEMATICO                                                             
+DIDACTICA DE LA MATEMATICA                                                      
+MATEMATICA APLICADA                                                             
+
+Call completed.
+
+SQL> CALL areasadscritas(4);
+ALGEBRA                                                                         
+
+Call completed.
+
+SQL> CALL areasadscritas(2);
+ASTRONOMIA Y ASTROFISICA                                                        
+
+Call completed.
+
+SQL> SPOOL OFF
